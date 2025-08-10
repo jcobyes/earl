@@ -1,142 +1,121 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Math Game with Menu</title>
-  <style>
-    body {
-      font-family: 'Courier New', Courier, monospace, sans-serif;
-      text-align: center;
-      background-color: #f0f8ff;
-      /* Math emoji background */
-      background-image: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 40px,
-        rgba(255, 255, 255, 0.6) 40px,
-        rgba(255, 255, 255, 0.6) 80px
-      ),
-      url("data:image/svg+xml;utf8,<svg xmlns='' width='200' height='200'><text x='10' y='40' font-size='40'>🧮</text><text x='70' y='40' font-size='40'>➕</text><text x='130' y='40' font-size='40'>➖</text><text x='10' y='120' font-size='40'>✖️</text><text x='70' y='120' font-size='40'>➗</text><text x='130' y='120' font-size='40'>🔢</text></svg>");
-      background-size: 200px 200px;
-    }
+<title>Math Game</title>
+<style>
+  body {
+    font-family: 'Courier New', Courier, monospace, sans-serif;
+    background-color: #f0f0f0;
+    background-image: ;
+    background-repeat: repeat;
+    background-size: 40px;
+    margin: 0;
+    padding: 0;
+  }
 
-    .box-container {
-      display: grid;
-      grid-template-columns: repeat(5, 100px);
-      gap: 15px;
-      justify-content: center;
-      margin-top: 20px;
-    }
+  #homeMenu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+  }
 
-    .box {
-      width: 100px;
-      height: 100px;
-      background-color: #ffcc66;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 18px;
-      cursor: pointer;
-      border-radius: 10px;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-      transition: transform 0.2s;
-    }
+  #gameContent {
+    display: none;
+    text-align: center;
+    padding: 20px;
+  }
 
-    .box:hover {
-      transform: scale(1.1);
-    }
+  .box-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-    }
+  .box {
+    width: 100px;
+    height: 100px;
+    background-color: #ffcc66;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
 
-    #homeMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-  </style>
+  .box:hover {
+    transform: scale(1.1);
+    background-color: #ffb347;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+</style>
 </head>
 <body>
 
 <!-- Home Menu -->
 <div id="homeMenu">
-  <h1>🧮 Welcome to Jacob's Math Game 🧮</h1>
-  <p>Test your brain with fun math challenges!</p>
+  <h1>📚 Welcome to the Math Challenge! 📚</h1>
+  <p>Click start to test your skills!</p>
   <button onclick="startGame()">Start Game</button>
 </div>
 
 <!-- Game Content -->
-<div id="gameContent" style="display:none;">
-  <h1>BOX = RANDOM QUESTION!</h1>
-  <div class="box-container">
-    <div class="box" onclick="askQuestion(0)">Box 1</div>
-    <div class="box" onclick="askQuestion(1)">Box 2</div>
-    <div class="box" onclick="askQuestion(2)">Box 3</div>
-    <div class="box" onclick="askQuestion(3)">Box 4</div>
-    <div class="box" onclick="askQuestion(4)">Box 5</div>
-    <div class="box" onclick="askQuestion(5)">Box 6</div>
-    <div class="box" onclick="askQuestion(6)">Box 7</div>
-    <div class="box" onclick="askQuestion(7)">Box 8</div>
-    <div class="box" onclick="askQuestion(8)">Box 9</div>
-    <div class="box" onclick="askQuestion(9)">Box 10</div>
-  </div>
+<div id="gameContent">
+  <h1>🎯 Click a Box for a Random Question!</h1>
+  <div class="box-container" id="boxContainer"></div>
   <button onclick="goBack()">⬅ Back to Menu</button>
 </div>
 
 <script>
   const questions = [
-    { q: "5 + 7 =", a: "12" },
-    { q: "9 × 6 =", a: "54" },
-    { q: "15 - 4 =", a: "11" },
-    { q: "8 ÷ 2 =", a: "4" },
-    { q: "12 + 14 =", a: "26" },
-    { q: "7 × 7 =", a: "49" },
-    { q: "100 - 45 =", a: "55" },
-    { q: "81 ÷ 9 =", a: "9" },
-    { q: "6 × 8 =", a: "48" },
-    { q: "50 + 25 =", a: "75" }
-  ];
-
-  const exercises = [
-    "Do 10 jumping jacks!",
-    "Run in place for 15 seconds!",
-    "Touch your toes 10 times!",
-    "Spin around 5 times!",
-    "Do 5 push-ups!",
-    "Hop on one foot 10 times!",
-    "Stretch your arms for 10 seconds!",
-    "Do a silly dance for 5 seconds!",
-    "Clap your hands 15 times!",
-    "Balance on one foot for 10 seconds!"
+    "What is 12 × 8?",
+    "Solve: 15 + 27",
+    "What is 144 ÷ 12?",
+    "Solve: 9²",
+    "What is 25 × 4?",
+    "Simplify: 50 - 17",
+    "What is 81 ÷ 9?",
+    "Solve: 7 × 14",
+    "What is the square root of 169?",
+    "Solve: (6 × 5) + 8"
   ];
 
   function startGame() {
     document.getElementById("homeMenu").style.display = "none";
     document.getElementById("gameContent").style.display = "block";
+    createBoxes(10);
   }
 
   function goBack() {
-    document.getElementById("homeMenu").style.display = "flex";
     document.getElementById("gameContent").style.display = "none";
+    document.getElementById("homeMenu").style.display = "flex";
   }
 
-  function askQuestion(index) {
-    let userAnswer = prompt(questions[index].q);
-    if (userAnswer === null) return; // Cancel
-    if (userAnswer.trim() === questions[index].a) {
-      alert("✅ Correct!");
-    } else {
-      alert("❌ Wrong! " + exercises[index]);
+  function createBoxes(num) {
+    const container = document.getElementById("boxContainer");
+    container.innerHTML = "";
+    for (let i = 1; i <= num; i++) {
+      const box = document.createElement("div");
+      box.classList.add("box");
+      box.innerText = i;
+      box.addEventListener("click", () => {
+        const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+        alert(randomQuestion);
+      });
+      container.appendChild(box);
     }
   }
 </script>
